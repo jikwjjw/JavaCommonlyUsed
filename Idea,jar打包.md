@@ -1,5 +1,5 @@
 + IDEA jar打包
-File->Aritifacts->选择主类->放在src下
+> File->Aritifacts->选择主类->放在src下
 ----------------------------
 + maven依赖
 
