@@ -3,7 +3,7 @@ File->Aritifacts->选择主类->放在src下
 ----------------------------
 + maven依赖
 
-'''
+"""
     <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.4</version>
@@ -27,4 +27,4 @@ File->Aritifacts->选择主类->放在src下
                     </execution>
                 </executions>
             </plugin>
-'''
+"""
