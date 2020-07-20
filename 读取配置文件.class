@@ -1,0 +1,24 @@
+package property;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class ReadCountryProperty {
+    public static List readCountryProperty() {
+        ArrayList<Object> list = null;
+        try {
+            Properties pt = new Properties();//获取Properties实例
+            InputStream is = ReadCountryProperty.class.getResourceAsStream("/country.properties");//获取配置文件输入流
+            pt.load(new InputStreamReader(is, "UTF-8"));
+            Set<Map.Entry<Object, Object>> entries = pt.entrySet();
+            list = new ArrayList<Object>();
+            for (Map.Entry<Object, Object> entry : entries) {
+                list.add(entry.getValue());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+}
