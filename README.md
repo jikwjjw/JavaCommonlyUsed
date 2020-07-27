@@ -5,6 +5,6 @@
 ------------
 + [配置文件读取](https://github.com/jikwjjw/JavaCommonlyUsed/blob/master/readProperty.class)
 -------------
-+ [解析(四级嵌套的)JSON文件并写入CSV中](https://github.com/jikwjjw/JavaCommonlyUsed/blob/master/IDNJsonParse.class)
++ [解析JSON文件并写入CSV中(四级嵌套的)](https://github.com/jikwjjw/JavaCommonlyUsed/blob/master/IDNJsonParse.class)
 ----------------
 +书：sed+awk
