@@ -1,0 +1,107 @@
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import java.io.*;
+
+
+public class IDNJsonParse {
+    /**
+     * 获取json
+     *
+     * @param fileName 文件路径
+     * @return json字符串
+     */
+    public static String getJson(String fileName) {
+        String jsonStr = "";
+        try {
+            File jsonFile = new File(fileName);
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            int ch = 0;
+            StringBuffer sb = new StringBuffer();
+            while ((ch = br.read()) != -1) {
+                sb.append((char) ch);
+            }
+            isr.close();
+            br.close();
+            jsonStr = sb.toString();
+            return jsonStr;
+        } catch (UnsupportedEncodingException | FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 分析JSON数据，并写入文件
+     *
+     * @param str  JSON数据
+     * @param path CSV文件路径
+     */
+    public static void writeCsv(String str, String path) {
+        try {
+            File csv = new File(path);
+            OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(csv, true), "UTF-8");
+            BufferedWriter bw = new BufferedWriter(osw);
+            bw.write('\ufeff');
+            bw.write("一级地区" + ",");
+            bw.write("二级地区" + ",");
+            bw.write("三级地区" + ",");
+            bw.write("四级地区" + ",");
+            bw.append('\n');
+            JSONObject jb = JSONObject.parseObject(str);
+            JSONArray subs1 = jb.getJSONArray("subs");
+            for (int i1 = 0; i1 < subs1.size(); i1++) {
+                JSONObject key1 = (JSONObject) subs1.get(i1);
+                JSONArray subs2 = key1.getJSONArray("subs");
+                Object ob1 = key1.get("name");
+                if (subs2 != null && !subs2.equals("")) {
+                    for (int i2 = 0; i2 < subs2.size(); i2++) {
+                        JSONObject key2 = (JSONObject) subs2.get(i2);
+                        JSONArray sub3 = key2.getJSONArray("subs");
+                        Object ob2 = key2.get("name");
+                        if (sub3 != null && !sub3.equals("")) {
+                            for (int i3 = 0; i3 < sub3.size(); i3++) {
+                                JSONObject key3 = (JSONObject) sub3.get(i3);
+                                JSONArray sub4 = key3.getJSONArray("subs");
+                                Object ob3 = key3.get("name");
+                                if (sub4 != null && !sub4.equals("")) {
+                                    for (int i4 = 0; i4 < sub4.size(); i4++) {
+                                        JSONObject key4 = (JSONObject) sub4.get(i4);
+                                        Object ob4 = key4.get("name");
+                                        if (ob4 != null && !ob4.equals("")) {
+                                            bw.append(ob1 + ",");
+                                            bw.append(ob2 + ",");
+                                            bw.append(ob3 + ",");
+                                            bw.append(ob4 + ",");
+                                            bw.append('\n');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            bw.flush();
+            bw.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) {
+        String filename = "C:/Users/j50014266/Desktop/DATA/印度尼西亚数据对比/idn_json/idn.json";
+        String CSVPath = "C:/Users/j50014266/Desktop/DATA/印度尼西亚数据对比/idn_compare.csv";
+        String str = IDNJsonParse.getJson(filename);
+        IDNJsonParse.writeCsv(str, CSVPath);
+    }
+}
