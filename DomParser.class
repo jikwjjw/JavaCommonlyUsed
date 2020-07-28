@@ -1,0 +1,74 @@
+package xml;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.List;
+
+/**
+ * <dependency>
+ * <groupId>dom4j</groupId>
+ * <artifactId>dom4j</artifactId>
+ * <version>1.6.1</version>
+ * </dependency>
+ */
+public class DomParser {
+    /**
+     * 解析文件
+     *
+     * @param path 文件路径
+     */
+    public static void read(String path) {
+        try {
+            SAXReader sr = new SAXReader();
+            File file = new File(path);
+            Document document = sr.read(file);
+            Element root = document.getRootElement();//获得根节点
+            Element field = root.element("Field");
+
+            String file1 = "C:/Users/j50014266/Desktop/DATA/xml数据对比/conf1_text.txt";
+            OutputStreamWriter osr1 = new OutputStreamWriter(new FileOutputStream(file1, true), "UTF-8");
+            BufferedWriter bw1 = new BufferedWriter(osr1);
+            bw1.write('\ufeff');
+
+            String file2 = "C:/Users/j50014266/Desktop/DATA/xml数据对比/conf2_text.txt";
+            OutputStreamWriter osr2 = new OutputStreamWriter(new FileOutputStream(file2, true), "UTF-8");
+            BufferedWriter bw2 = new BufferedWriter(osr2);
+            bw2.write('\ufeff');
+
+//            //子节点属性数据
+            List<Element> listElement = field.elements();// 所有一级子节点的list
+            for (Element e : listElement) {
+                if (e.getName().equals("Mapping")) {
+                    bw1.append(e.attributeValue("tomtom_value") + ",");
+                    bw1.append(e.attributeValue("value"));
+                    bw1.append("\n");
+                }
+                if (e.getName().equals("CategoryItem")) {
+                    Element e1 = e.element("Filter");
+                    bw2.append(e1.attributeValue("FieldValue") + ",");
+                    Element e2 = e.element("Category");
+                    bw2.append(e2.getText());
+                    bw2.append("\n");
+                }
+            }
+
+            bw1.flush();
+            bw1.close();
+            bw2.flush();
+            bw2.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        String path = "C:/Users/j50014266/Desktop/DATA/xml数据对比/conf1.xml";
+        DomParser.read(path);
+    }
+}
